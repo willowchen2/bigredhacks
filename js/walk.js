@@ -21,8 +21,10 @@ window.initWalk = function () {
     addressControl: false, fullscreenControl: false, motionTracking: false
   });
   layer = createPinLayer(panorama, document.getElementById("stage"), document.getElementById("overlay"));
-  layer.set(pins, p => p.chunk + 1);
-  els.prev.onclick = () => go(index - 1);
+layer.set(pins, palace ? palace.chunks : [], {
+  onSelect: (pin, i) => go(i),
+  activePinIndex: 0
+});  els.prev.onclick = () => go(index - 1);
   els.next.onclick = () => go(index + 1);
   go(0);
 };

@@ -3,37 +3,58 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Create a palace</title>
+  <title>Create a Palace - Locus Lane</title>
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    .create { max-width: 40rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-    textarea, input[type=text], input[type=number] { width: 100%; font: inherit; padding: .6rem; border-radius: 6px; border: 0; }
-    textarea { min-height: 12rem; }
-    .controls { display: flex; gap: 1rem; align-items: center; margin: 1rem 0; flex-wrap: wrap; }
-    .controls input { width: 5rem; }
-    ul { list-style: none; padding: 0; }
-    li { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
-    #msg { color: var(--lantern); min-height: 1.4em; }
-  </style>
 </head>
 <body>
-    <script src="js/nav.js"></script>
+  <script src="js/nav.js"></script>
+
   <main class="create">
-    <h1>Paste your notes</h1>
-    <p><label>Or upload a .txt or .md file: <input type="file" id="file" accept=".txt,.md"></label></p>
-    <textarea id="notes" placeholder="Paste lecture or study notes here..."></textarea>
-    <div class="controls">
-      <label>How many chunks? <input id="count" type="number" min="3" max="15" value="8"></label>
-      <label>Where will you walk? <select id="place"></select></label>
-      <button id="extract">Split into chunks</button>
+    <div class="card-panel">
+      <header class="create-header">
+        <h1>Create your memory walk</h1>
+        <p class="sub">Paste study notes or upload a file to convert them into street stops.</p>
+      </header>
+
+      <!-- Custom styled upload button -->
+      <div class="upload-row">
+        <label for="file" class="file-btn">
+          <span>📄</span> Upload .txt or .md
+          <input type="file" id="file" accept=".txt,.md">
+        </label>
+        <span id="file-name" class="file-name">No file selected</span>
+      </div>
+
+      <textarea id="notes" placeholder="Paste your lecture notes, flashcard list, or study guide here..."></textarea>
+
+      <!-- Clean grid controls -->
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="count">Number of stops</label>
+          <input id="count" type="number" min="3" max="15" value="8">
+        </div>
+
+        <div class="form-field">
+          <label for="place">Walking location</label>
+          <select id="place"></select>
+        </div>
+
+        <div class="form-field action-field">
+          <button id="extract" class="btn-primary">Split into stops</button>
+        </div>
+      </div>
+
+      <p id="msg"></p>
     </div>
-    <p id="msg"></p>
+
+    <!-- Generated chunks list & footer actions -->
     <ul id="facts"></ul>
-    <div class="controls">
-      <button id="add">Add a chunk</button>
-      <button id="build" hidden>Build my palace</button>
+
+    <div class="build-bar">
+      <button id="build" class="btn-primary" hidden>Build my palace &rarr;</button>
     </div>
   </main>
+
   <script src="js/palace.js"></script>
   <script src="js/create.js"></script>
 </body>

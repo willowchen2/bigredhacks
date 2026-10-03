@@ -49,7 +49,6 @@ function addRow(chunk) {
   li.append(title, detail, del);
   listEl.appendChild(li);
 }
-document.getElementById("add").onclick = () => addRow({ title: "", detail: "" });
 
 buildBtn.onclick = () => {
   const chunks = [...listEl.children].map(li => ({

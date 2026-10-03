@@ -29,7 +29,7 @@ window.initPlace = function () {
   refresh();
 };
 
-function refresh() {
+function refresh(activePinIdx = null) {
   bankEl.innerHTML = "";
   palace.chunks.forEach((c, i) => {
     const li = document.createElement("li");
@@ -45,7 +45,13 @@ function refresh() {
     };
     bankEl.appendChild(li);
   });
-  if (layer) layer.set(palace.pins, p => p.chunk + 1, removePin);
+
+  if (layer) {
+    layer.set(palace.pins, palace.chunks, {
+      onRemove: removePin,
+      activePinIndex: activePinIdx
+    });
+  }
 }
 
 function select(i) {
@@ -59,14 +65,16 @@ function select(i) {
 function placePin(i, x, y) {
   const dir = clickToDirection(panorama, stageEl, x, y);
   const pos = panorama.getPosition();
-  palace.pins = palace.pins.filter(p => p.chunk !== i); // one pin per chunk
+  palace.pins = palace.pins.filter(p => p.chunk !== i);
   palace.pins.push({ chunk: i, pano: panorama.getPano(), lat: pos.lat(), lng: pos.lng(), ...dir });
   savePalace(palace);
   selected = null;
   document.body.classList.remove("placing");
   hintEl.textContent = DEFAULT_HINT;
-  refresh();
-  // Turn click-to-walk back on only AFTER this click is over, so Street View doesn't move us.
+  
+  // Refresh and open the card right at the spot placed
+  const newPinIdx = palace.pins.length - 1;
+  refresh(newPinIdx);
   setTimeout(() => panorama.setOptions({ clickToGo: true }), 400);
 }
 
