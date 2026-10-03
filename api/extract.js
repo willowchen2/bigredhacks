@@ -3,14 +3,15 @@
 // If you get "model not found", check AI Studio for current model names.
 const MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest"];
 
-const SYSTEM = `You split study notes into memorable chunks for a memory palace.
+const SYSTEM = `You turn study notes into vocabulary-style flashcards for a memory palace.
 Return ONLY a JSON array of objects: [{"title": "...", "detail": "..."}]. No preamble, no markdown fences.
 Rules:
-- "title" is a 2-5 word cue for the chunk.
-- "detail" is 1-2 short sentences (max 25 words) with the key information to remember.
-- Group related ideas so each chunk covers ONE idea. Skip filler and repeats.
+- "title" is the TERM being defined. Use ONE word whenever possible. If the term is a fixed multi-word phrase (for example "cognitive dissonance"), keep that exact phrase, max 5 words.
+- "detail" is the DEFINITION: 1-3 complete sentences explaining what the term means, and/or a key fact or example if the notes give one. It must not just repeat the term.
+- Cover all terms, one per entry. No duplicates, skip filler.
 - Keep the notes' original order.
-- Use only information from the notes; never invent facts.`;
+- Use only information from the notes; never invent facts. If the notes don't define a term directly, use the closest explanation the notes give.
+- Another example is history notes that split terms up into events, dates, people, places, etc.`;
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
