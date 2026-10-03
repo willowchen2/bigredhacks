@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quiz mode - Locus Lane</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <script src="js/nav.js"></script>
+  <div id="stage">
+    <div id="pano"></div>
+    <div id="overlay"></div>
+  </div>
+  <aside class="bank quiz-bank">
+    <h2>Quiz mode</h2>
+    <p id="hint"></p>
+    <p id="progress" class="quiz-progress"></p>
+    <div id="summary" class="quiz-summary" hidden></div>
+    <ul id="bank"></ul>
+    <div class="quiz-actions">
+      <button id="next-pin" type="button">Next unanswered pin</button>
+      <button id="restart" type="button" class="quiz-btn quiz-again">Restart quiz</button>
+    </div>
+  </aside>
+  <script src="js/config.js"></script>
+  <script src="js/palace.js"></script>
+  <script src="js/pins.js"></script>
+  <script src="js/quiz.js"></script>
+</body>
+</html>
