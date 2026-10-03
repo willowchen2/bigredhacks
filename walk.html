@@ -7,10 +7,15 @@
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <div id="pano"></div>
+  <script src="js/nav.js"></script>
+  <div id="stage">
+    <div id="pano"></div>
+    <div id="overlay"></div>
+  </div>
   <section class="card">
     <small id="count"></small>
     <h2 id="fact"></h2>
+    <p id="detail"></p>
     <p id="scene"></p>
     <div class="row">
       <button id="prev">Back</button>
@@ -22,6 +27,7 @@
   </section>
   <script src="js/config.js"></script>
   <script src="js/palace.js"></script>
+  <script src="js/pins.js"></script>
   <script src="js/walk.js"></script>
 </body>
 </html>

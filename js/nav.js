@@ -4,10 +4,9 @@
     { href: "index.html", label: "Home" },
     { href: "create.html", label: "Create" },
     { href: "place.html", label: "Place pins" },
-    { href: "walk.html", label: "Walk" },
-    { href: "walk.html?quiz=1", label: "Quiz" }
+    { href: "walk.html", label: "Walk" }
   ];
-  const here = (location.pathname.split("/").pop() || "index.html") + location.search;
+  const here = location.pathname.split("/").pop() || "index.html";
 
   const nav = document.createElement("nav");
   nav.className = "topnav";
@@ -31,5 +30,14 @@
   });
   nav.appendChild(ul);
 
+  const auth = document.createElement("div");
+  auth.id = "auth";
+  auth.className = "auth";
+  nav.appendChild(auth);
+
   document.body.prepend(nav);
+
+  const authScript = document.createElement("script");
+  authScript.src = "js/auth.js";
+  document.head.appendChild(authScript);
 })();
