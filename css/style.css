@@ -1,0 +1,22 @@
+:root { --night:#14213d; --mist:#e9f1ec; --lantern:#f2b134; --ink:#0d1527; }
+* { box-sizing: border-box; }
+html, body { height: 100%; margin: 0; }
+body { font-family: system-ui, sans-serif; background: var(--night); color: var(--mist); }
+h1, h2 { font-family: Georgia, "Times New Roman", serif; font-weight: 700; }
+a.btn, button { background: var(--lantern); color: var(--ink); border: 0; padding: .7rem 1.2rem;
+  border-radius: 6px; font: inherit; font-weight: 600; cursor: pointer; text-decoration: none; }
+button:disabled { opacity: .35; cursor: default; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--mist); outline-offset: 2px; }
+
+.home { max-width: 36rem; margin: 0 auto; padding: 14vh 1.5rem; }
+.home h1 { font-size: clamp(2.2rem, 7vw, 3.5rem); line-height: 1.05; margin: 0 0 1rem; }
+.home p { font-size: 1.1rem; line-height: 1.5; margin: 0 0 2rem; max-width: 30rem; }
+
+#pano { position: absolute; inset: 0; }
+.card { z-index: 10; position: absolute; left: 1rem; right: 1rem; bottom: 1rem; max-width: 28rem;
+  background: rgba(20,33,61,.92); padding: 1rem 1.2rem; border-radius: 10px; }
+.card small { color: var(--lantern); }
+.card h2 { margin: .3rem 0; font-size: 1.3rem; }
+.card p { margin: 0 0 .8rem; line-height: 1.45; }
+.card .row { display: flex; gap: .5rem; }
+#status { color: var(--lantern); margin: .5rem 0 0; }
