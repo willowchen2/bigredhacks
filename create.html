@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Create a palace</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .create { max-width: 40rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+    textarea, input[type=text], input[type=number] { width: 100%; font: inherit; padding: .6rem; border-radius: 6px; border: 0; }
+    textarea { min-height: 12rem; }
+    .controls { display: flex; gap: 1rem; align-items: center; margin: 1rem 0; flex-wrap: wrap; }
+    .controls input { width: 5rem; }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
+    #msg { color: var(--lantern); min-height: 1.4em; }
+  </style>
+</head>
+<body>
+    <script src="js/nav.js"></script>
+  <main class="create">
+    <h1>Paste your notes</h1>
+    <p><label>Or upload a .txt or .md file: <input type="file" id="file" accept=".txt,.md"></label></p>
+    <textarea id="notes" placeholder="Paste lecture or study notes here..."></textarea>
+    <div class="controls">
+      <label>How many chunks? <input id="count" type="number" min="3" max="15" value="8"></label>
+      <label>Where will you walk? <select id="place"></select></label>
+      <button id="extract">Split into chunks</button>
+    </div>
+    <p id="msg"></p>
+    <ul id="facts"></ul>
+    <div class="controls">
+      <button id="add">Add a chunk</button>
+      <button id="build" hidden>Build my palace</button>
+    </div>
+  </main>
+  <script src="js/palace.js"></script>
+  <script src="js/create.js"></script>
+</body>
+</html>

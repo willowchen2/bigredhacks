@@ -3,29 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Walk your palace</title>
+  <title>Place your pins</title>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <script src="js/nav.js"></script>
+    <script src="js/nav.js"></script>
   <div id="stage">
     <div id="pano"></div>
     <div id="overlay"></div>
   </div>
-  <section class="card">
-    <small id="count"></small>
-    <h2 id="fact"></h2>
-    <p id="detail"></p>
-    <p id="scene"></p>
-    <div class="row">
-      <button id="prev">Back</button>
-      <button id="next">Next stop</button>
-    </div>
-    <p id="status"></p>
-  </section>
+  <aside class="bank">
+    <h2>Pin bank</h2>
+    <p id="hint"></p>
+    <p id="date"></p>
+    <ul id="bank"></ul>
+    <a class="btn" href="walk.html">Walk my palace</a>
+  </aside>
   <script src="js/config.js"></script>
   <script src="js/palace.js"></script>
   <script src="js/pins.js"></script>
-  <script src="js/walk.js"></script>
+  <script src="js/place.js"></script>
 </body>
 </html>
