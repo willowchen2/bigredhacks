@@ -1,4 +1,4 @@
-# Memory Palace
+# Locus Lane
 
 ## Run it
 1. Put your Google Maps API key in `js/config.js`.
