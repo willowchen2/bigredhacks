@@ -14,6 +14,52 @@ let panorama, service, layer, selected = null;
 const dragImg = new Image(30, 40);
 dragImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='40' viewBox='0 0 30 40'%3E%3Cpath d='M15 38C15 38 2 24 2 14a13 13 0 1 1 26 0c0 10-13 24-13 24z' fill='%23f2b134' stroke='%230d1527' stroke-width='2'/%3E%3C/svg%3E";
 
+// Route stepping: only when the palace was created with a chosen route.
+const route = palace.route;
+const ROUTE_STEP_M = 40;
+let routeIdx = 0, stride = 1;
+if (route && route.points.length > 1) {
+  stride = Math.max(1, Math.round(ROUTE_STEP_M / (route.lengthM / (route.points.length - 1))));
+  document.getElementById("route-ctl").hidden = false;
+  document.getElementById("route-back").onclick = () => stepRoute(-1);
+  document.getElementById("route-fwd").onclick = () => stepRoute(1);
+  updateRoutePos();
+}
+
+function bearing(a, b) {
+  const y = Math.sin(rad(b[1] - a[1])) * Math.cos(rad(b[0]));
+  const x = Math.cos(rad(a[0])) * Math.sin(rad(b[0])) - Math.sin(rad(a[0])) * Math.cos(rad(b[0])) * Math.cos(rad(b[1] - a[1]));
+  return (deg(Math.atan2(y, x)) + 360) % 360;
+}
+
+function updateRoutePos() {
+  const pct = Math.round(100 * routeIdx / (route.points.length - 1));
+  document.getElementById("route-pos").textContent =
+    `Route: ${pct}% of ${(route.lengthM / 1000).toFixed(1)} km`;
+}
+
+function faceAhead(dir) {
+  const last = route.points.length - 1;
+  const to = route.points[Math.max(0, Math.min(last, routeIdx + dir * stride))];
+  const from = route.points[routeIdx];
+  if (to !== from) panorama.setPov({ heading: bearing(from, to), pitch: 0 });
+}
+
+// Move along the route; if there is no Street View at a spot, keep going in the same direction.
+function stepRoute(dir, tries = 0) {
+  const last = route.points.length - 1;
+  const next = Math.max(0, Math.min(last, routeIdx + dir * stride));
+  if (next === routeIdx || tries > 12) return;
+  routeIdx = next;
+  updateRoutePos();
+  const [lat, lng] = route.points[routeIdx];
+  service.getPanorama({ location: { lat, lng }, radius: 40, source: google.maps.StreetViewSource.OUTDOOR }, (d, s) => {
+    if (s !== "OK") return stepRoute(dir, tries + 1);
+    panorama.setPano(d.location.pano);
+    faceAhead(dir);
+  });
+}
+
 window.initPlace = function () {
   service = new google.maps.StreetViewService();
   panorama = new google.maps.StreetViewPanorama(document.getElementById("pano"), {
@@ -22,7 +68,11 @@ window.initPlace = function () {
   layer = createPinLayer(panorama, stageEl, overlayEl);
   panorama.addListener("pano_changed", updateDate);
   service.getPanorama({ location: { lat: palace.location.lat, lng: palace.location.lng }, radius: 200 }, (data, status) => {
-    if (status === "OK") { panorama.setPano(data.location.pano); panorama.setVisible(true); }
+    if (status === "OK") {
+      panorama.setPano(data.location.pano);
+      if (route && route.points.length > 1) faceAhead(1);
+      panorama.setVisible(true);
+    }
     else hintEl.textContent = "No Street View near this location. Go back and choose another.";
   });
   hintEl.textContent = DEFAULT_HINT;

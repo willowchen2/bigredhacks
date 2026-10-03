@@ -34,11 +34,6 @@
           <input id="count" type="number" min="3" max="15" value="8">
         </div>
 
-        <div class="form-field">
-          <label for="place">Walking location</label>
-          <select id="place"></select>
-        </div>
-
         <div class="form-field action-field">
           <button id="extract" class="btn-primary">Split into stops</button>
         </div>
@@ -50,12 +45,27 @@
     <!-- Generated chunks list & footer actions -->
     <ul id="facts"></ul>
 
+    <!-- Walking route: picked on Google Maps, anywhere with Street View -->
+    <div class="card-panel route-picker">
+      <h2>Choose your walking route</h2>
+      <p class="sub">Search for anywhere, then click the map to drop a start, any stops in between, and an end. The route follows walkable streets. Blue lines show where Street View exists.</p>
+      <div id="search-slot"></div>
+      <div id="routemap" role="application" aria-label="Map for choosing a walking route"></div>
+      <div class="route-bar">
+        <span id="route-info">Click the map to set a start point.</span>
+        <button id="route-undo" class="btn-secondary" type="button">Undo</button>
+        <button id="route-clear" class="btn-secondary" type="button">Clear</button>
+      </div>
+    </div>
+
     <div class="build-bar">
       <button id="build" class="btn-primary" hidden>Build my palace &rarr;</button>
     </div>
   </main>
 
+  <script src="js/config.js"></script>
   <script src="js/palace.js"></script>
+  <script src="js/routepicker.js"></script>
   <script src="js/create.js"></script>
 </body>
 </html>

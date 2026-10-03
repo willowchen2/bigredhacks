@@ -6,7 +6,8 @@
     { href: "place.html", label: "Place pins" },
     { href: "walk.html", label: "Walk" }
   ];
-  const here = location.pathname.split("/").pop() || "index.html";
+  const strip = s => s.replace(/\.html$/, "");
+  const here = strip(location.pathname.split("/").pop() || "index");
 
   const nav = document.createElement("nav");
   nav.className = "topnav";
@@ -24,7 +25,7 @@
     const a = document.createElement("a");
     a.href = l.href;
     a.textContent = l.label;
-    if (l.href === here) a.setAttribute("aria-current", "page");
+    if (strip(l.href) === here) a.setAttribute("aria-current", "page");
     li.appendChild(a);
     ul.appendChild(li);
   });

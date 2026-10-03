@@ -4,8 +4,6 @@ const listEl = document.getElementById("facts");
 const msgEl = document.getElementById("msg");
 const extractBtn = document.getElementById("extract");
 const buildBtn = document.getElementById("build");
-const placeEl = document.getElementById("place");
-LOCATIONS.forEach((l, i) => placeEl.add(new Option(l.name, i)));
 
 // Upload: read a .txt/.md file into the textarea.
 document.getElementById("file").onchange = async (e) => {
@@ -56,6 +54,9 @@ buildBtn.onclick = () => {
     detail: li.querySelector(".d").value.trim()
   })).filter(c => c.title || c.detail);
   if (!chunks.length) { msgEl.textContent = "Add at least one chunk."; return; }
-  savePalace({ location: LOCATIONS[placeEl.value], chunks, pins: [] });
+  const route = window.routePicker && routePicker.getRoute();
+  if (!route) { msgEl.textContent = "Choose a walking route on the map first: click a start and an end."; return; }
+  const [lat, lng] = route.points[0];
+  savePalace({ location: { name: route.name, lat, lng }, route, chunks, pins: [] });
   location.href = "place.html";
 };

@@ -12,6 +12,7 @@
   --card-border: #e8e2d5;
   --shadow-subtle: 0 8px 24px -4px rgba(45, 40, 35, 0.08), 0 3px 6px -2px rgba(45, 40, 35, 0.04);
   --nav-h: 3.5rem;
+  --nav-green: #2f6b43;
 }
 
 * { box-sizing: border-box; }
@@ -318,15 +319,16 @@ body { padding-top: var(--nav-h); }
 
 .topnav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 100;
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-  padding: 0 1rem; background: var(--ink); border-bottom: 1px solid rgba(233,241,236,.15); }
+  padding: 0 1rem; background: var(--nav-green); border-bottom: 1px solid rgba(0,0,0,.15);
+  box-shadow: 0 2px 8px rgba(0,0,0,.12); }
 .topnav .brand { font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: 1.15rem;
-  color: var(--lantern); text-decoration: none; white-space: nowrap; }
+  color: #ffffff; text-decoration: none; white-space: nowrap; }
 .topnav ul { display: flex; gap: .25rem; list-style: none; margin: 0; padding: 0; }
-.topnav ul a { display: block; padding: .5rem .8rem; border-radius: 6px; color: var(--mist);
+.topnav ul a { display: block; padding: .5rem .8rem; border-radius: 6px; color: #eaf4ec;
   text-decoration: none; font-size: .95rem; }
-.topnav ul a:hover { background: rgba(233,241,236,.12); }
-.topnav ul a[aria-current="page"] { background: var(--lantern); color: var(--ink); font-weight: 600; }
-.topnav a:focus-visible { outline: 3px solid var(--mist); outline-offset: 2px; }
+.topnav ul a:hover { background: rgba(255,255,255,.16); }
+.topnav ul a[aria-current="page"] { background: #ffffff; color: var(--nav-green); font-weight: 600; }
+.topnav a:focus-visible { outline: 3px solid #ffffff; outline-offset: 2px; }
 
 /* Keep the Street View area and pin bank below the nav */
 #stage { top: var(--nav-h); }
@@ -972,3 +974,50 @@ ul#facts li .btn-del:hover {
     margin-top: 3.5rem;
   }
 }
+
+.topnav .auth { color: #ffffff; }
+.topnav .auth button { background: rgba(255,255,255,.16); border: 1px solid rgba(255,255,255,.45); }
+.topnav .auth button:hover { background: rgba(255,255,255,.28); }
+
+/* Create page: count + split button now sit side by side */
+.form-grid { grid-template-columns: 8rem auto; justify-content: start; }
+
+/* Route picker */
+.route-picker { margin-top: 1.5rem; }
+.route-picker h2 { margin: 0 0 .3rem; font-size: 1.4rem; }
+.route-picker .sub { margin: 0 0 1rem; color: var(--ink-muted); font-size: .92rem; line-height: 1.45; }
+#search-slot { margin-bottom: .75rem; }
+#search-slot gmp-place-autocomplete { width: 100%; color-scheme: light; }
+#routemap { height: 24rem; border-radius: 14px; border: 1.5px solid var(--card-border); overflow: hidden; }
+.route-bar { display: flex; align-items: center; gap: .6rem; margin-top: .75rem; }
+.route-bar #route-info { flex: 1; font-size: .9rem; font-weight: 600; color: var(--ink-muted); }
+.route-bar button { padding: .45rem .9rem; font-size: .85rem; }
+.route-bar button:disabled { opacity: .45; cursor: default; }
+.rp-dot { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  font: 700 .8rem/1 system-ui, sans-serif; color: #fff; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+.rp-dot.start { background: var(--matcha-hover); }
+.rp-dot.end { background: var(--amber); }
+.rp-dot.via { background: var(--ink-deep); }
+
+/* Place page: route stepper */
+#route-ctl { margin-bottom: .8rem; }
+#route-ctl p { margin: 0 0 .4rem; font-weight: 600; }
+#route-ctl .row { display: flex; gap: .4rem; }
+#route-ctl button { flex: 1; padding: .5rem .6rem; font-size: .9rem; }
+
+.bank {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--shadow-subtle);
+  color: var(--ink-deep);
+  backdrop-filter: blur(8px);
+}
+.bank p { color: var(--ink-muted); }
+.bank li {
+  background: var(--matcha-soft);
+  border: 1px solid transparent;
+  color: var(--ink-deep);
+}
+.bank li:hover { border-color: var(--matcha); }
+.bank li.selected { outline: 3px solid var(--amber); background: #fff; }
+.bank li.placed { opacity: .55; }
