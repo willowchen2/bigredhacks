@@ -72,6 +72,7 @@
   async function update() {
     const my = ++token;
     route = null;
+    document.dispatchEvent(new Event("route:changed"));
     if (line) { line.setMap(null); line = null; }
     renderMarkers();
     undoBtn.disabled = clearBtn.disabled = waypoints.length === 0;
@@ -103,6 +104,7 @@
         lengthM: Math.round(length),
         points: pts.map(p => [+p.lat.toFixed(5), +p.lng.toFixed(5)])
       };
+      document.dispatchEvent(new Event("route:changed"));
       const km = (length / 1000).toFixed(length < 10000 ? 1 : 0);
       say(`Route: ${km} km. Checking Street View coverage...`);
 

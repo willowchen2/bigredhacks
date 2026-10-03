@@ -12,7 +12,7 @@
   --card-border: #e8e2d5;
   --shadow-subtle: 0 8px 24px -4px rgba(45, 40, 35, 0.08), 0 3px 6px -2px rgba(45, 40, 35, 0.04);
   --nav-h: 3.5rem;
-  --nav-green: #6b8f71;
+  --nav-green: #5b7e61;
 }
 
 * { box-sizing: border-box; }
@@ -1004,6 +1004,86 @@ ul#facts li .btn-del:hover {
 #route-ctl p { margin: 0 0 .4rem; font-weight: 600; }
 #route-ctl .row { display: flex; gap: .4rem; }
 #route-ctl button { flex: 1; padding: .5rem .6rem; font-size: .9rem; }
+
+/* ===== Nav as steps ===== */
+.topnav ul { align-items: center; }
+.topnav ul li + li::before { content: "\203A"; color: rgba(255,255,255,.55); margin-right: .25rem; }
+.topnav ul li { display: flex; align-items: center; }
+.topnav ul .step-link { display: flex; align-items: center; gap: .45rem; }
+.step-num { width: 1.45rem; height: 1.45rem; border-radius: 50%; display: grid; place-items: center;
+  font-size: .78rem; font-weight: 700; background: rgba(255,255,255,.2); color: #fff; }
+.topnav ul a[aria-current="page"] .step-num { background: var(--nav-green); color: #fff; }
+.step-link.soon { padding: .5rem .8rem; color: rgba(255,255,255,.6); font-size: .95rem; cursor: default; }
+.step-link.soon small { font-size: .7rem; border: 1px solid rgba(255,255,255,.4); border-radius: 999px; padding: 0 .4rem; }
+@media (max-width: 760px) {
+  .topnav ul a:not([aria-current="page"]) .lbl, .step-link.soon { display: none; }
+  .topnav ul li + li::before { display: none; }
+  .topnav .brand { font-size: 1rem; }
+}
+
+/* ===== Create page: steps, progress, inputs ===== */
+.pn { display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; border-radius: 50%;
+  background: var(--matcha); color: #fff; font: 700 .85rem/1 system-ui, sans-serif; flex-shrink: 0; }
+.progress-steps { list-style: none; display: flex; justify-content: space-between; gap: .5rem; padding: 0; margin: 0 0 .6rem; }
+.progress-steps li { display: flex; align-items: center; gap: .5rem; font-size: .88rem; font-weight: 600; color: var(--ink-muted); }
+.progress-steps .pn { background: var(--card-border); color: var(--ink-muted); }
+.progress-steps li.current { color: var(--ink-deep); }
+.progress-steps li.current .pn { background: var(--amber); color: #fff; }
+.progress-steps li.done { color: var(--matcha-hover); }
+.progress-steps li.done .pn { background: var(--matcha); color: #fff; }
+.progress-track, .progress { height: 8px; background: var(--card-border); border-radius: 999px; overflow: hidden; margin-bottom: 1.25rem; }
+#progress-fill, #bar { height: 100%; width: 0; background: var(--matcha); border-radius: 999px; transition: width .3s ease; }
+.step-h { display: flex; align-items: center; gap: .6rem; font-size: 1.35rem; margin: 1.5rem 0 .3rem; }
+.card-panel .create-header + .step-h { margin-top: 0; }
+.how-to { margin: 0 0 1rem; color: var(--ink-muted); font-size: .92rem; }
+.or-divider { display: flex; align-items: center; gap: .8rem; margin: 1rem 0; color: var(--ink-muted); font-size: .8rem; font-weight: 700; letter-spacing: .08em; }
+.or-divider::before, .or-divider::after { content: ""; flex: 1; height: 1px; background: var(--card-border); }
+.step-panel { margin-top: 1.5rem; }
+.step-panel .step-h { margin-top: 0; }
+.step-panel ul#facts { margin: 1rem 0 !important; }
+.empty { color: var(--ink-muted); font-style: italic; margin: 1rem 0; }
+.route-picker .step-h { margin-top: 0; }
+ul#facts li { align-items: flex-start !important; }
+ul#facts li::before { margin-top: .5rem; }
+ul#facts li textarea.d { flex: 1 !important; min-height: 2.5rem; border: 1.5px solid var(--card-border); border-radius: 10px;
+  padding: .55rem .75rem; font: inherit; font-size: .95rem; resize: vertical; color: var(--ink-deep); background: #fff; }
+ul#facts li textarea.d:focus { outline: none; border-color: var(--matcha); box-shadow: 0 0 0 3px var(--matcha-soft); }
+ul#facts li button { align-self: center; }
+.build-bar { align-items: center; }
+#build-msg { color: var(--amber); font-weight: 600; font-size: .9rem; }
+
+/* ===== Place page: bank instructions ===== */
+.bank-steps { margin: 0 0 .8rem; padding-left: 1.2rem; font-size: .88rem; line-height: 1.45; }
+.bank-steps li { margin-bottom: .25rem; }
+.bank #hint { font-weight: 700; color: var(--matcha-hover); }
+
+/* ===== Walk page ===== */
+.walk-bar .walk-top { margin-bottom: .6rem; }
+.walk-bar .progress { margin: .4rem 0 0; height: 6px; }
+.walk-bar #instr { margin: 0 0 .9rem; }
+.walk-bar .row button { flex: 1; padding: .6rem .5rem; }
+.pin-badge:not(:has(.badge-title)) { padding-right: .45rem; }
+
+/* ===== Home page ===== */
+.home-section { margin: 0 0 4.5rem; }
+.home-section h2 { font-size: 1.9rem; margin: .4rem 0 .8rem; }
+.lead { max-width: 46rem; color: var(--ink-muted); font-size: 1.06rem; line-height: 1.7; margin: 0 0 1.5rem; }
+.sub-h { font-family: Charter, Georgia, serif; font-size: 1.3rem; margin: 2rem 0 1rem; }
+.why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-bottom: 1.5rem; }
+.example-box { background: #fff; border: 1px solid var(--card-border); border-left: 5px solid var(--amber); border-radius: 18px; padding: 1.5rem 1.75rem; box-shadow: var(--shadow-subtle); }
+.example-box h3 { margin: 0 0 .5rem; font-size: 1.2rem; }
+.example-box p { color: var(--ink-muted); line-height: 1.6; margin: .5rem 0; }
+.example-box ol { padding-left: 1.2rem; line-height: 1.6; }
+.example-box li { margin-bottom: .5rem; }
+.callout { background: var(--matcha-soft); border-radius: 16px; padding: 1.25rem 1.5rem; max-width: 46rem; line-height: 1.6; }
+.how-list { list-style: none; padding: 0; margin: 0 0 2rem; display: grid; gap: 1rem; }
+.how-list li { display: flex; gap: 1rem; align-items: flex-start; background: #fff; border: 1px solid var(--card-border); border-radius: 16px; padding: 1.1rem 1.35rem; }
+.how-list .pn { width: 2.2rem; height: 2.2rem; font-size: 1rem; background: var(--amber); }
+.how-list h3 { margin: 0 0 .25rem; font-size: 1.08rem; }
+.how-list p { margin: 0; color: var(--ink-muted); line-height: 1.5; font-size: .93rem; }
+.tab-tag { margin-left: .4rem; font: 700 .68rem/1 system-ui, sans-serif; letter-spacing: .05em; text-transform: uppercase;
+  background: var(--matcha-soft); color: var(--matcha-hover); padding: .25rem .5rem; border-radius: 999px; vertical-align: middle; }
+@media (max-width: 860px) { .why-grid { grid-template-columns: 1fr; } }
 
 .bank {
   background: var(--card-bg);

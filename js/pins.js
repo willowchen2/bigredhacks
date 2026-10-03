@@ -58,6 +58,8 @@ function createPinLayer(panorama, container, overlay) {
   let activePinIndex = null;
   let onRemoveCallback = null;
   let onSelectCallback = null;
+  let onTapCallback = null;
+  let revealStates = null; // walk mode: 0 = number only, 1 = term, 2 = term + definition
 
   function draw() {
     const current = panorama.getPano();
@@ -78,6 +80,7 @@ function createPinLayer(panorama, container, overlay) {
   }
 
   function setActiveCard(index) {
+    if (revealStates) return;
     activePinIndex = index;
     els.forEach((el, i) => {
       const popup = el.querySelector(".pin-card-popup");
@@ -105,30 +108,42 @@ if (Array.isArray(newChunksOrLabelFn) && newChunksOrLabelFn.length > 0) {
       onRemoveCallback = clickOrOptions.onRemove || null;
       onSelectCallback = clickOrOptions.onSelect || null;
       activePinIndex = clickOrOptions.activePinIndex ?? null;
+      revealStates = clickOrOptions.revealStates || null;
+      onTapCallback = clickOrOptions.onTap || null;
     } else if (typeof clickOrOptions === "function") {
       onRemoveCallback = clickOrOptions;
     }
 
     els = pins.map((pin, i) => {
       const chunk = chunks[pin.chunk] || { title: `Stop ${pin.chunk + 1}`, detail: "" };
+      const st = revealStates ? revealStates[i] : 2;
       const anchor = document.createElement("div");
       anchor.className = "pin-anchor";
 
       // 1. Teardrop Marker
       const marker = document.createElement("button");
       marker.className = "pin-marker";
-      marker.setAttribute("aria-label", chunk.title);
+      marker.setAttribute("aria-label", st >= 1 ? chunk.title : `Pin ${pin.chunk + 1}`);
       marker.textContent = "";
 
       // 2. Floating Pill with Key Term
       const badge = document.createElement("div");
       badge.className = "pin-badge";
-      badge.innerHTML = `<span class="badge-num">${pin.chunk + 1}</span><span class="badge-title">${chunk.title || "Stop"}</span>`;
+      const num = document.createElement("span");
+      num.className = "badge-num";
+      num.textContent = String(pin.chunk + 1);
+      badge.appendChild(num);
+      if (st >= 1) {
+        const t = document.createElement("span");
+        t.className = "badge-title";
+        t.textContent = chunk.title || "Stop";
+        badge.appendChild(t);
+      }
 
       // 3. Floating Popup Card directly where the pin is located
       const card = document.createElement("div");
       card.className = "pin-card-popup";
-      card.hidden = (i !== activePinIndex);
+      card.hidden = revealStates ? st < 2 : (i !== activePinIndex);
 
       const header = document.createElement("div");
       header.className = "pin-card-header";
@@ -163,6 +178,7 @@ if (Array.isArray(newChunksOrLabelFn) && newChunksOrLabelFn.length > 0) {
 
       const toggle = (e) => {
         e.stopPropagation();
+        if (onTapCallback) { onTapCallback(i); return; }
         const willOpen = (activePinIndex !== i);
         setActiveCard(willOpen ? i : null);
         if (onSelectCallback) onSelectCallback(pin, i);

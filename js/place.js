@@ -5,9 +5,7 @@ const stageEl = document.getElementById("stage");
 const overlayEl = document.getElementById("overlay");
 const bankEl = document.getElementById("bank");
 const hintEl = document.getElementById("hint");
-const dateEl = document.getElementById("date");
-let baseDate = null; // the imagery date where the user started
-const DEFAULT_HINT = "Walk around, then tap a chunk and tap the scene, or drag a chunk onto it. Tap a pin to send it back.";
+const placedText = () => `${new Set(palace.pins.map(p => p.chunk)).size} of ${palace.chunks.length} terms placed`;
 let panorama, service, layer, selected = null;
 
 // Drag ghost that looks like a pin (tip at the cursor)
@@ -23,19 +21,12 @@ if (route && route.points.length > 1) {
   document.getElementById("route-ctl").hidden = false;
   document.getElementById("route-back").onclick = () => stepRoute(-1);
   document.getElementById("route-fwd").onclick = () => stepRoute(1);
-  updateRoutePos();
 }
 
 function bearing(a, b) {
   const y = Math.sin(rad(b[1] - a[1])) * Math.cos(rad(b[0]));
   const x = Math.cos(rad(a[0])) * Math.sin(rad(b[0])) - Math.sin(rad(a[0])) * Math.cos(rad(b[0])) * Math.cos(rad(b[1] - a[1]));
   return (deg(Math.atan2(y, x)) + 360) % 360;
-}
-
-function updateRoutePos() {
-  const pct = Math.round(100 * routeIdx / (route.points.length - 1));
-  document.getElementById("route-pos").textContent =
-    `Route: ${pct}% of ${(route.lengthM / 1000).toFixed(1)} km`;
 }
 
 function faceAhead(dir) {
@@ -51,7 +42,6 @@ function stepRoute(dir, tries = 0) {
   const next = Math.max(0, Math.min(last, routeIdx + dir * stride));
   if (next === routeIdx || tries > 12) return;
   routeIdx = next;
-  updateRoutePos();
   const [lat, lng] = route.points[routeIdx];
   service.getPanorama({ location: { lat, lng }, radius: 40, source: google.maps.StreetViewSource.OUTDOOR }, (d, s) => {
     if (s !== "OK") return stepRoute(dir, tries + 1);
@@ -66,7 +56,6 @@ window.initPlace = function () {
     addressControl: false, fullscreenControl: false, motionTracking: false, enableCloseButton: false
   });
   layer = createPinLayer(panorama, stageEl, overlayEl);
-  panorama.addListener("pano_changed", updateDate);
   service.getPanorama({ location: { lat: palace.location.lat, lng: palace.location.lng }, radius: 200 }, (data, status) => {
     if (status === "OK") {
       panorama.setPano(data.location.pano);
@@ -75,7 +64,6 @@ window.initPlace = function () {
     }
     else hintEl.textContent = "No Street View near this location. Go back and choose another.";
   });
-  hintEl.textContent = DEFAULT_HINT;
   refresh();
 };
 
@@ -102,13 +90,14 @@ function refresh(activePinIdx = null) {
       activePinIndex: activePinIdx
     });
   }
+  if (selected === null) hintEl.textContent = placedText();
 }
 
 function select(i) {
   selected = selected === i ? null : i;
   panorama.setOptions({ clickToGo: selected === null }); // don't walk away while placing
   document.body.classList.toggle("placing", selected !== null);
-  hintEl.textContent = selected === null ? DEFAULT_HINT : "Now tap where it belongs in the scene.";
+  hintEl.textContent = selected === null ? placedText() : "Now click the spot in the scene where this term belongs.";
   refresh();
 }
 
@@ -120,8 +109,7 @@ function placePin(i, x, y) {
   savePalace(palace);
   selected = null;
   document.body.classList.remove("placing");
-  hintEl.textContent = DEFAULT_HINT;
-  
+
   // Refresh and open the card right at the spot placed
   const newPinIdx = palace.pins.length - 1;
   refresh(newPinIdx);
@@ -132,18 +120,6 @@ function removePin(pin) {
   palace.pins = palace.pins.filter(p => p !== pin);
   savePalace(palace);
   refresh();
-}
-
-function updateDate() {
-  const id = panorama.getPano();
-  if (!id) return;
-  service.getPanorama({ pano: id }, (d, s) => {
-    if (s !== "OK" || !d.imageDate) return;
-    if (!baseDate) baseDate = d.imageDate;
-    dateEl.textContent = d.imageDate === baseDate
-      ? `Imagery from ${d.imageDate}`
-      : `Imagery from ${d.imageDate}. It may look different from ${baseDate}, where you started.`;
-  });
 }
 
 // Tap to place: ignore taps that were really camera drags.

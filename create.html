@@ -10,44 +10,56 @@
   <script src="js/nav.js"></script>
 
   <main class="create">
+    <ol class="progress-steps" id="progress" aria-label="Progress">
+      <li><span class="pn">1</span> Add your notes</li>
+      <li><span class="pn">2</span> Review terms</li>
+      <li><span class="pn">3</span> Choose route</li>
+    </ol>
+    <div class="progress-track"><div id="progress-fill"></div></div>
+
     <div class="card-panel">
       <header class="create-header">
         <h1>Create your memory walk</h1>
-        <p class="sub">Paste study notes or upload a file to convert them into street stops.</p>
+        <p class="sub">Turn your notes into terms and definitions, then pin them along a route you choose.</p>
       </header>
 
-      <!-- Custom styled upload button -->
+      <h2 class="step-h"><span class="pn">1</span> Add your notes</h2>
+      <p class="how-to">Upload a file <strong>or</strong> paste your notes. Either one works.</p>
+
       <div class="upload-row">
         <label for="file" class="file-btn">
-          <span>📄</span> Upload .txt or .md
+          <span>📄</span> Upload a .txt or .md file
           <input type="file" id="file" accept=".txt,.md">
         </label>
         <span id="file-name" class="file-name">No file selected</span>
       </div>
 
-      <textarea id="notes" placeholder="Paste your lecture notes, flashcard list, or study guide here..."></textarea>
+      <div class="or-divider"><span>OR</span></div>
 
-      <!-- Clean grid controls -->
+      <textarea id="notes" aria-label="Paste your notes" placeholder="Paste your lecture notes, vocab list, or study guide here..."></textarea>
+
       <div class="form-grid">
         <div class="form-field">
-          <label for="count">Number of stops</label>
+          <label for="count">Number of terms</label>
           <input id="count" type="number" min="3" max="15" value="8">
         </div>
-
         <div class="form-field action-field">
-          <button id="extract" class="btn-primary">Split into stops</button>
+          <button id="extract" class="btn-primary">Split into terms</button>
         </div>
       </div>
-
       <p id="msg"></p>
     </div>
 
-    <!-- Generated chunks list & footer actions -->
-    <ul id="facts"></ul>
+    <div class="card-panel step-panel" id="step2">
+      <h2 class="step-h"><span class="pn">2</span> Review your terms</h2>
+      <p class="how-to">Edit any term or definition, remove ones you don't want, or add your own.</p>
+      <ul id="facts"></ul>
+      <p id="facts-empty" class="empty">No terms yet. Split your notes above, or add your own below.</p>
+      <button id="add-term" class="btn-secondary" type="button">+ Add a term</button>
+    </div>
 
-    <!-- Walking route: picked on Google Maps, anywhere with Street View -->
     <div class="card-panel route-picker">
-      <h2>Choose your walking route</h2>
+      <h2 class="step-h"><span class="pn">3</span> Choose your walking route</h2>
       <p class="sub">Search for anywhere, then click the map to drop a start, any stops in between, and an end. The route follows walkable streets. Blue lines show where Street View exists.</p>
       <div id="search-slot"></div>
       <div id="routemap" role="application" aria-label="Map for choosing a walking route"></div>
@@ -59,7 +71,8 @@
     </div>
 
     <div class="build-bar">
-      <button id="build" class="btn-primary" hidden>Build my palace &rarr;</button>
+      <button id="build" class="btn-primary">Build my palace &rarr;</button>
+      <span id="build-msg" role="status"></span>
     </div>
   </main>
 
