@@ -30,5 +30,14 @@
   });
   nav.appendChild(ul);
 
+  const auth = document.createElement("div");
+  auth.id = "auth";
+  auth.className = "auth";
+  nav.appendChild(auth);
+
   document.body.prepend(nav);
+
+  const authScript = document.createElement("script");
+  authScript.src = "js/auth.js";
+  document.head.appendChild(authScript);
 })();

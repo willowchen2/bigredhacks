@@ -274,117 +274,71 @@ textarea#notes:focus {
 }
 .card small { color: var(--amber); font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; font-size: 0.75rem; }
 .card h2 { margin: .3rem 0; font-size: 1.3rem; }
-.card p { margin: 0 0 .8rem; line-height: 1.45; color: var(--ink-muted); }
-.card .row { display: flex; gap: .6rem; }
-#status { color: var(--amber); margin: .5rem 0 0; font-weight: 600; font-size: .9rem; }
+.card p { margin: 0 0 .8rem; line-height: 1.45; }
+.card .row { display: flex; gap: .5rem; }
+#status { color: var(--lantern); margin: .5rem 0 0; }
 
-/* Pin bank drawer */
-.bank {
-  position: absolute;
-  top: calc(var(--nav-h) + 1rem);
-  right: 1rem;
-  width: 19rem;
-  max-height: calc(100% - var(--nav-h) - 2rem);
-  overflow-y: auto;
-  background: var(--card-bg);
-  backdrop-filter: blur(14px);
-  border: 1px solid var(--card-border);
-  padding: 1.2rem;
-  border-radius: 18px;
-  box-shadow: var(--shadow-subtle);
-  z-index: 10;
-}
+
+#stage { position: absolute; inset: 0; }
+#overlay { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.pin { position: absolute; left: 0; top: 0; pointer-events: auto; width: 30px; height: 30px;
+  margin: -15px 0 0 -15px; padding: 0; border-radius: 50%; border: 2px solid var(--ink);
+  background: var(--lantern); color: var(--ink); font-weight: 700; }
+
+.bank { position: absolute; top: 1rem; right: 1rem; width: 18rem; max-height: calc(100% - 2rem);
+  overflow: auto; background: rgba(20,33,61,.92); padding: 1rem; border-radius: 10px; z-index: 10; }
 .bank h2 { margin: 0 0 .4rem; font-size: 1.2rem; }
-.bank p { margin: 0 0 .8rem; font-size: .9rem; line-height: 1.4; color: var(--ink-muted); }
+.bank p { margin: 0 0 .8rem; font-size: .9rem; line-height: 1.4; }
 .bank ul { list-style: none; padding: 0; margin: 0 0 1rem; }
-.bank li {
-  padding: 0.65rem 0.85rem;
-  margin-bottom: 0.5rem;
-  border-radius: 10px;
-  background: #ffffff;
-  border: 1px solid #eee8dd;
-  color: var(--ink-deep);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-  cursor: grab;
-  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
-}
-.bank li:hover { border-color: var(--matcha); background: #faf9f6; }
-.bank li.selected { outline: none; border-color: var(--amber); background: #fdf8f4; box-shadow: 0 0 0 3px rgba(217, 119, 54, 0.2); }
-.bank li.placed { opacity: .45; }
-
-/* Custom Terracotta Pins */
-.pin {
-  position: absolute;
-  left: 0;
-  top: 0;
-  pointer-events: auto;
-  width: 32px;
-  height: 42px;
-  margin: -40px 0 0 -16px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='42' viewBox='0 0 32 42'%3E%3Cpath d='M16 40 C16 40 3 26 3 16 A13 13 0 1 1 29 16 C29 26 16 40 16 40 Z' fill='%23d97736' stroke='%2325282a' stroke-width='2'/%3E%3Ccircle cx='16' cy='15' r='5' fill='%23f5f2eb'/%3E%3C/svg%3E") no-repeat center / contain;
-  color: var(--ink-deep);
-  font-weight: 800;
-  font-size: 12px;
-  text-align: center;
-  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.25));
-  transition: transform 0.15s ease;
-}
-.pin:hover { transform: scale(1.12); }
-
-body.placing #stage, body.placing #stage *:not(.pin) {
-  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='40' viewBox='0 0 30 40'%3E%3Cpath d='M15 38C15 38 2 24 2 14a13 13 0 1 1 26 0c0 10-13 24-13 24z' fill='%23d97736' stroke='%2325282a' stroke-width='2'/%3E%3C/svg%3E") 15 38, crosshair !important;
-}
-
-/* Nav bar */
-.topnav {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: var(--nav-h);
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0 1.25rem;
-  background: rgba(245, 242, 235, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid #e5dfd2;
-}
-.topnav .brand {
-  font-family: "Charter", "Georgia", serif;
-  font-weight: 700;
-  font-size: 1.15rem;
-  color: var(--ink-deep);
-  text-decoration: none;
-  white-space: nowrap;
-}
-.topnav ul { display: flex; gap: .35rem; list-style: none; margin: 0; padding: 0; }
-.topnav ul a {
-  display: block;
-  padding: .45rem .85rem;
-  border-radius: 8px;
-  color: var(--ink-muted);
-  text-decoration: none;
-  font-size: .95rem;
-  font-weight: 600;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-.topnav ul a:hover { background: rgba(0, 0, 0, 0.04); color: var(--ink-deep); }
-.topnav ul a[aria-current="page"] {
-  background: var(--matcha-soft);
-  color: var(--matcha);
-  font-weight: 700;
-}
-
+.bank li { padding: .5rem .7rem; margin-bottom: .4rem; border-radius: 6px; background: rgba(233,241,236,.12);
+  cursor: grab; }
+.bank li.selected { outline: 3px solid var(--lantern); }
+.bank li.placed { opacity: .4; }
 @media (max-width: 640px) {
   .bank { top: auto; left: 1rem; right: 1rem; bottom: 1rem; width: auto; max-height: 40%; }
 }
+
+/* Placed pins: the TIP of the pin is the exact spot it marks */
+.pin { position: absolute; left: 0; top: 0; pointer-events: auto; width: 30px; height: 40px;
+  margin: -38px 0 0 -15px; padding: 0 0 12px; border: 0; border-radius: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='40' viewBox='0 0 30 40'%3E%3Cpath d='M15 38C15 38 2 24 2 14a13 13 0 1 1 26 0c0 10-13 24-13 24z' fill='%23f2b134' stroke='%230d1527' stroke-width='2'/%3E%3C/svg%3E") no-repeat center / contain;
+  color: var(--ink); font-weight: 700; font-size: 13px; line-height: 1; }
+
+/* While a chunk is selected, the cursor becomes a pin (hotspot = the tip) */
+body.placing #stage, body.placing #stage *:not(.pin) {
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='40' viewBox='0 0 30 40'%3E%3Cpath d='M15 38C15 38 2 24 2 14a13 13 0 1 1 26 0c0 10-13 24-13 24z' fill='%23f2b134' stroke='%230d1527' stroke-width='2'/%3E%3C/svg%3E") 15 38, crosshair !important;
+}
+
+#pano { z-index: 0; }
+#overlay { z-index: 5; }
+
+
+:root { --nav-h: 3.25rem; }
+body { padding-top: var(--nav-h); }
+
+.topnav { position: fixed; top: 0; left: 0; right: 0; height: var(--nav-h); z-index: 100;
+  display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+  padding: 0 1rem; background: var(--ink); border-bottom: 1px solid rgba(233,241,236,.15); }
+.topnav .brand { font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: 1.15rem;
+  color: var(--lantern); text-decoration: none; white-space: nowrap; }
+.topnav ul { display: flex; gap: .25rem; list-style: none; margin: 0; padding: 0; }
+.topnav ul a { display: block; padding: .5rem .8rem; border-radius: 6px; color: var(--mist);
+  text-decoration: none; font-size: .95rem; }
+.topnav ul a:hover { background: rgba(233,241,236,.12); }
+.topnav ul a[aria-current="page"] { background: var(--lantern); color: var(--ink); font-weight: 600; }
+.topnav a:focus-visible { outline: 3px solid var(--mist); outline-offset: 2px; }
+
+/* Keep the Street View area and pin bank below the nav */
+#stage { top: var(--nav-h); }
+.bank { top: calc(var(--nav-h) + 1rem); max-height: calc(100% - var(--nav-h) - 2rem); }
+@media (max-width: 640px) {
+  .topnav ul a { padding: .45rem .5rem; font-size: .85rem; }
+  .bank { top: auto; max-height: 40%; }
+}
+/* Sign-in area in the nav */
+.topnav .auth { display: flex; align-items: center; gap: .6rem; font-size: .9rem; white-space: nowrap; }
+.topnav .auth button { padding: .4rem .8rem; font-size: .85rem; }
+@media (max-width: 640px) { .topnav .auth span { display: none; } }
 
 /* Location Picker & Custom Search Box */
 .location-field {
