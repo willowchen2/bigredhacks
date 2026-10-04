@@ -12,8 +12,12 @@
 
   const nav = mk("nav", "topnav");
   nav.setAttribute("aria-label", "Main");
-  const brand = mk("a", "brand", "Locus Lane");
-  brand.href = "index.html";
+  const brand = mk("a", "brand");
+  const logo = document.createElement("img");
+  logo.src = "favicon.png";
+  logo.alt = "";
+  logo.className = "brand-logo";
+  brand.append(logo, document.createTextNode("Locus Lane"));  brand.href = "index.html";
   nav.appendChild(brand);
 
   const ul = document.createElement("ul");

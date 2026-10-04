@@ -1152,3 +1152,6 @@ ul#facts li button { align-self: center; }
 .quiz-result.right { color: var(--matcha); }
 .quiz-result.wrong { color: #b84a39; }
 .quiz-summary[hidden] { display: none; }
+
+.topnav .brand { display: inline-flex; align-items: center; gap: .5rem; }
+.topnav .brand-logo { height: 2rem; width: 2rem; object-fit: contain; }
