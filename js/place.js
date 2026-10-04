@@ -5,14 +5,50 @@ const stageEl = document.getElementById("stage");
 const overlayEl = document.getElementById("overlay");
 const bankEl = document.getElementById("bank");
 const hintEl = document.getElementById("hint");
-const dateEl = document.getElementById("date");
-let baseDate = null; // the imagery date where the user started
-const DEFAULT_HINT = "Walk around, then tap a chunk and tap the scene, or drag a chunk onto it. Tap a pin to send it back.";
+const placedText = () => `${new Set(palace.pins.map(p => p.chunk)).size} of ${palace.chunks.length} terms placed`;
 let panorama, service, layer, selected = null;
 
 // Drag ghost that looks like a pin (tip at the cursor)
 const dragImg = new Image(30, 40);
 dragImg.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='40' viewBox='0 0 30 40'%3E%3Cpath d='M15 38C15 38 2 24 2 14a13 13 0 1 1 26 0c0 10-13 24-13 24z' fill='%23f2b134' stroke='%230d1527' stroke-width='2'/%3E%3C/svg%3E";
+
+// Route stepping: only when the palace was created with a chosen route.
+const route = palace.route;
+const ROUTE_STEP_M = 40;
+let routeIdx = 0, stride = 1;
+if (route && route.points.length > 1) {
+  stride = Math.max(1, Math.round(ROUTE_STEP_M / (route.lengthM / (route.points.length - 1))));
+  document.getElementById("route-ctl").hidden = false;
+  document.getElementById("route-back").onclick = () => stepRoute(-1);
+  document.getElementById("route-fwd").onclick = () => stepRoute(1);
+}
+
+function bearing(a, b) {
+  const y = Math.sin(rad(b[1] - a[1])) * Math.cos(rad(b[0]));
+  const x = Math.cos(rad(a[0])) * Math.sin(rad(b[0])) - Math.sin(rad(a[0])) * Math.cos(rad(b[0])) * Math.cos(rad(b[1] - a[1]));
+  return (deg(Math.atan2(y, x)) + 360) % 360;
+}
+
+function faceAhead(dir) {
+  const last = route.points.length - 1;
+  const to = route.points[Math.max(0, Math.min(last, routeIdx + dir * stride))];
+  const from = route.points[routeIdx];
+  if (to !== from) panorama.setPov({ heading: bearing(from, to), pitch: 0 });
+}
+
+// Move along the route; if there is no Street View at a spot, keep going in the same direction.
+function stepRoute(dir, tries = 0) {
+  const last = route.points.length - 1;
+  const next = Math.max(0, Math.min(last, routeIdx + dir * stride));
+  if (next === routeIdx || tries > 12) return;
+  routeIdx = next;
+  const [lat, lng] = route.points[routeIdx];
+  service.getPanorama({ location: { lat, lng }, radius: 40, source: google.maps.StreetViewSource.OUTDOOR }, (d, s) => {
+    if (s !== "OK") return stepRoute(dir, tries + 1);
+    panorama.setPano(d.location.pano);
+    faceAhead(dir);
+  });
+}
 
 window.initPlace = function () {
   service = new google.maps.StreetViewService();
@@ -20,16 +56,18 @@ window.initPlace = function () {
     addressControl: false, fullscreenControl: false, motionTracking: false, enableCloseButton: false
   });
   layer = createPinLayer(panorama, stageEl, overlayEl);
-  panorama.addListener("pano_changed", updateDate);
   service.getPanorama({ location: { lat: palace.location.lat, lng: palace.location.lng }, radius: 200 }, (data, status) => {
-    if (status === "OK") { panorama.setPano(data.location.pano); panorama.setVisible(true); }
+    if (status === "OK") {
+      panorama.setPano(data.location.pano);
+      if (route && route.points.length > 1) faceAhead(1);
+      panorama.setVisible(true);
+    }
     else hintEl.textContent = "No Street View near this location. Go back and choose another.";
   });
-  hintEl.textContent = DEFAULT_HINT;
   refresh();
 };
 
-function refresh() {
+function refresh(activePinIdx = null) {
   bankEl.innerHTML = "";
   palace.chunks.forEach((c, i) => {
     const li = document.createElement("li");
@@ -45,28 +83,36 @@ function refresh() {
     };
     bankEl.appendChild(li);
   });
-  if (layer) layer.set(palace.pins, p => p.chunk + 1, removePin);
+
+  if (layer) {
+    layer.set(palace.pins, palace.chunks, {
+      onRemove: removePin,
+      activePinIndex: activePinIdx
+    });
+  }
+  if (selected === null) hintEl.textContent = placedText();
 }
 
 function select(i) {
   selected = selected === i ? null : i;
   panorama.setOptions({ clickToGo: selected === null }); // don't walk away while placing
   document.body.classList.toggle("placing", selected !== null);
-  hintEl.textContent = selected === null ? DEFAULT_HINT : "Now tap where it belongs in the scene.";
+  hintEl.textContent = selected === null ? placedText() : "Now click the spot in the scene where this term belongs.";
   refresh();
 }
 
 function placePin(i, x, y) {
   const dir = clickToDirection(panorama, stageEl, x, y);
   const pos = panorama.getPosition();
-  palace.pins = palace.pins.filter(p => p.chunk !== i); // one pin per chunk
+  palace.pins = palace.pins.filter(p => p.chunk !== i);
   palace.pins.push({ chunk: i, pano: panorama.getPano(), lat: pos.lat(), lng: pos.lng(), ...dir });
   savePalace(palace);
   selected = null;
   document.body.classList.remove("placing");
-  hintEl.textContent = DEFAULT_HINT;
-  refresh();
-  // Turn click-to-walk back on only AFTER this click is over, so Street View doesn't move us.
+
+  // Refresh and open the card right at the spot placed
+  const newPinIdx = palace.pins.length - 1;
+  refresh(newPinIdx);
   setTimeout(() => panorama.setOptions({ clickToGo: true }), 400);
 }
 
@@ -74,18 +120,6 @@ function removePin(pin) {
   palace.pins = palace.pins.filter(p => p !== pin);
   savePalace(palace);
   refresh();
-}
-
-function updateDate() {
-  const id = panorama.getPano();
-  if (!id) return;
-  service.getPanorama({ pano: id }, (d, s) => {
-    if (s !== "OK" || !d.imageDate) return;
-    if (!baseDate) baseDate = d.imageDate;
-    dateEl.textContent = d.imageDate === baseDate
-      ? `Imagery from ${d.imageDate}`
-      : `Imagery from ${d.imageDate}. It may look different from ${baseDate}, where you started.`;
-  });
 }
 
 // Tap to place: ignore taps that were really camera drags.

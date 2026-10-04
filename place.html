@@ -14,10 +14,21 @@
   </div>
   <aside class="bank">
     <h2>Pin bank</h2>
+    <ol class="bank-steps">
+      <li>Pick a term below.</li>
+      <li>Click the spot in the street view where it belongs (a sign, door, tree), or drag the term onto the scene.</li>
+      <li>Move along your route and repeat. Click a pin to remove it.</li>
+    </ol>
+    <div id="route-ctl" hidden>
+      <p>Move along your route</p>
+      <div class="row">
+        <button id="route-back" type="button">&larr; Back</button>
+        <button id="route-fwd" type="button">Forward &rarr;</button>
+      </div>
+    </div>
     <p id="hint"></p>
-    <p id="date"></p>
     <ul id="bank"></ul>
-    <a class="btn" href="walk.html">Walk my palace</a>
+    <a class="btn" href="walk.html">Next: walk &amp; memorize &rarr;</a>
   </aside>
   <script src="js/config.js"></script>
   <script src="js/palace.js"></script>

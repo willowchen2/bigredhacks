@@ -3,14 +3,15 @@
 // If you get "model not found", check AI Studio for current model names.
 const MODELS = ["gemini-flash-latest", "gemini-flash-lite-latest"];
 
-const SYSTEM = `You split study notes into memorable chunks for a memory palace.
+const SYSTEM = `You turn study notes into vocabulary-style flashcards for a memory palace.
 Return ONLY a JSON array of objects: [{"title": "...", "detail": "..."}]. No preamble, no markdown fences.
 Rules:
-- "title" is a 2-5 word cue for the chunk.
-- "detail" is 1-2 short sentences (max 25 words) with the key information to remember.
-- Group related ideas so each chunk covers ONE idea. Skip filler and repeats.
+- "title" is the TERM being defined. Use ONE word whenever possible. If the term is a fixed multi-word phrase (for example "cognitive dissonance"), keep that exact phrase, max 5 words.
+- "detail" is the DEFINITION: 1-3 complete sentences explaining what the term means and/or a key fact or example if the notes give one. It must be clearly longer than the title and must not just repeat the term.
+- Pick the most important terms, one per entry. No duplicates, skip filler.
 - Keep the notes' original order.
-- Use only information from the notes; never invent facts.`;
+- Use only information from the notes; never invent facts. If the notes don't define a term directly, use the closest explanation the notes give.
+- For example if history notes are inputted, split into important chunks like specific events, dates, places, people, etc.`;
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -26,7 +27,7 @@ async function callGemini(model, userText) {
       body: JSON.stringify({
         systemInstruction: { parts: [{ text: SYSTEM }] },
         contents: [{ role: "user", parts: [{ text: userText }] }],
-        generationConfig: { responseMimeType: "application/json" }
+        generationConfig: { responseMimeType: "application/json", temperature: 0.3 }
       })
     }
   );
@@ -39,7 +40,7 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: "Paste at least a few sentences of notes." });
   }
   const n = Math.min(Math.max(parseInt(count) || 8, 3), 15);
-  const userText = `Split these notes into exactly ${n} chunks:\n\n${notes.slice(0, 8000)}`;
+  const userText = `Pick the ${n} most important terms from these notes (fewer if the notes contain fewer) and define each:\n\n${notes.slice(0, 8000)}`;
 
   try {
     let r = null;

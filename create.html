@@ -3,38 +3,82 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Create a palace</title>
+  <title>Create a Palace - Locus Lane</title>
   <link rel="stylesheet" href="css/style.css">
-  <style>
-    .create { max-width: 40rem; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
-    textarea, input[type=text], input[type=number] { width: 100%; font: inherit; padding: .6rem; border-radius: 6px; border: 0; }
-    textarea { min-height: 12rem; }
-    .controls { display: flex; gap: 1rem; align-items: center; margin: 1rem 0; flex-wrap: wrap; }
-    .controls input { width: 5rem; }
-    ul { list-style: none; padding: 0; }
-    li { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
-    #msg { color: var(--lantern); min-height: 1.4em; }
-  </style>
 </head>
 <body>
-    <script src="js/nav.js"></script>
+  <script src="js/nav.js"></script>
+
   <main class="create">
-    <h1>Paste your notes</h1>
-    <p><label>Or upload a .txt or .md file: <input type="file" id="file" accept=".txt,.md"></label></p>
-    <textarea id="notes" placeholder="Paste lecture or study notes here..."></textarea>
-    <div class="controls">
-      <label>How many chunks? <input id="count" type="number" min="3" max="15" value="8"></label>
-      <label>Where will you walk? <select id="place"></select></label>
-      <button id="extract">Split into chunks</button>
+    <ol class="progress-steps" id="progress" aria-label="Progress">
+      <li><span class="pn">1</span> Add your notes</li>
+      <li><span class="pn">2</span> Review terms</li>
+      <li><span class="pn">3</span> Choose route</li>
+    </ol>
+    <div class="progress-track"><div id="progress-fill"></div></div>
+
+    <div class="card-panel">
+      <header class="create-header">
+        <h1>Create your memory walk</h1>
+        <p class="sub">Turn your notes into terms and definitions, then pin them along a route you choose.</p>
+      </header>
+
+      <h2 class="step-h"><span class="pn">1</span> Add your notes</h2>
+      <p class="how-to">Upload a file <strong>or</strong> paste your notes. Either one works.</p>
+
+      <div class="upload-row">
+        <label for="file" class="file-btn">
+          <span>📄</span> Upload a .txt or .md file
+          <input type="file" id="file" accept=".txt,.md">
+        </label>
+        <span id="file-name" class="file-name">No file selected</span>
+      </div>
+
+      <div class="or-divider"><span>OR</span></div>
+
+      <textarea id="notes" aria-label="Paste your notes" placeholder="Paste your lecture notes, vocab list, or study guide here..."></textarea>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="count">Number of terms</label>
+          <input id="count" type="number" min="3" max="15" value="8">
+        </div>
+        <div class="form-field action-field">
+          <button id="extract" class="btn-primary">Split into terms</button>
+        </div>
+      </div>
+      <p id="msg"></p>
     </div>
-    <p id="msg"></p>
-    <ul id="facts"></ul>
-    <div class="controls">
-      <button id="add">Add a chunk</button>
-      <button id="build" hidden>Build my palace</button>
+
+    <div class="card-panel step-panel" id="step2">
+      <h2 class="step-h"><span class="pn">2</span> Review your terms</h2>
+      <p class="how-to">Edit any term or definition, remove ones you don't want, or add your own.</p>
+      <ul id="facts"></ul>
+      <p id="facts-empty" class="empty">No terms yet. Split your notes above, or add your own below.</p>
+      <button id="add-term" class="btn-secondary" type="button">+ Add a term</button>
+    </div>
+
+    <div class="card-panel route-picker">
+      <h2 class="step-h"><span class="pn">3</span> Choose your walking route</h2>
+      <p class="sub">Search for anywhere, then click the map to drop a start, any stops in between, and an end. The route follows walkable streets. Blue lines show where Street View exists.</p>
+      <div id="search-slot"></div>
+      <div id="routemap" role="application" aria-label="Map for choosing a walking route"></div>
+      <div class="route-bar">
+        <span id="route-info">Click the map to set a start point.</span>
+        <button id="route-undo" class="btn-secondary" type="button">Undo</button>
+        <button id="route-clear" class="btn-secondary" type="button">Clear</button>
+      </div>
+    </div>
+
+    <div class="build-bar">
+      <button id="build" class="btn-primary">Build my palace &rarr;</button>
+      <span id="build-msg" role="status"></span>
     </div>
   </main>
+
+  <script src="js/config.js"></script>
   <script src="js/palace.js"></script>
+  <script src="js/routepicker.js"></script>
   <script src="js/create.js"></script>
 </body>
 </html>
