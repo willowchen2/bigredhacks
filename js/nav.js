@@ -4,7 +4,7 @@
     { href: "create.html", label: "Create" },
     { href: "place.html", label: "Place pins" },
     { href: "walk.html", label: "Walk & memorize" },
-    { label: "Quiz", soon: true }
+    { href: "quiz.html", label: "Quiz" }
   ];
   const strip = s => s.replace(/\.html$/, "");
   const here = strip(location.pathname.split("/").pop() || "index");

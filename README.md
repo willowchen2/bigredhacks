@@ -7,6 +7,7 @@ Turn your notes into a "memory palace" (Loci Memory Method) you can walk on real
 1. **Create:** upload or paste notes, split them into terms and definitions, and choose a walking route on the map.
 2. **Place pins:** move along the route in Street View and pin each term to a landmark.
 3. **Walk & memorize:** rewalk the path. Each pin shows only its number until you reveal the term, then the definition.
+4. **Quiz:** test yourself. Pins are shuffled and hide their terms. Look around, click a pin, type a guess (optional), reveal the answer, then mark whether you got it. Remembered pins turn green and missed ones red, and you can retry just the missed pins. Quiz progress is saved in your browser.
 
 ## Setup
 

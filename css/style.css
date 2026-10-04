@@ -1101,3 +1101,54 @@ ul#facts li button { align-self: center; }
 .bank li:hover { border-color: var(--matcha); }
 .bank li.selected { outline: 3px solid var(--amber); background: #fff; }
 .bank li.placed { opacity: .55; }
+
+/* =========================================================
+   QUIZ MODE
+   ========================================================= */
+.quiz-bank { background: var(--card-bg); color: var(--ink-deep); border: 1px solid var(--card-border);
+  border-radius: 16px; box-shadow: var(--shadow-subtle); }
+.quiz-bank h2 { color: var(--ink-deep); }
+.quiz-bank p { color: var(--ink-muted); }
+.quiz-bank .quiz-progress { color: var(--amber); font-weight: 700; }
+.quiz-bank li { cursor: pointer; background: var(--bg-sand); border: 1px solid var(--card-border); color: var(--ink-deep); }
+.quiz-bank li:hover { border-color: var(--matcha); }
+.quiz-bank li.right { background: var(--matcha-soft); border-color: var(--matcha); }
+.quiz-bank li.wrong { background: #fbf5f4; border-color: #f0d5d0; color: #9c2d1c; }
+.quiz-actions { display: flex; flex-direction: column; gap: .5rem; }
+.quiz-summary { background: var(--matcha-soft); border: 1px solid var(--matcha); border-radius: 12px;
+  padding: .75rem; margin: 0 0 .8rem; display: flex; flex-direction: column; gap: .5rem; }
+
+/* pin colours after grading */
+.pin-marker.quiz-right, .pin-marker.quiz-right:hover, .pin-marker.quiz-right:focus, .pin-marker.quiz-right:focus-visible {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='42' viewBox='0 0 32 42'%3E%3Cpath d='M16 40 C16 40 3 26 3 16 A13 13 0 1 1 29 16 C29 26 16 40 16 40 Z' fill='%236b8f71' stroke='%2325282a' stroke-width='2'/%3E%3Ccircle cx='16' cy='15' r='5' fill='%23f5f2eb'/%3E%3C/svg%3E") no-repeat center / contain !important; }
+.pin-marker.quiz-wrong, .pin-marker.quiz-wrong:hover, .pin-marker.quiz-wrong:focus, .pin-marker.quiz-wrong:focus-visible {
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='42' viewBox='0 0 32 42'%3E%3Cpath d='M16 40 C16 40 3 26 3 16 A13 13 0 1 1 29 16 C29 26 16 40 16 40 Z' fill='%23b84a39' stroke='%2325282a' stroke-width='2'/%3E%3Ccircle cx='16' cy='15' r='5' fill='%23f5f2eb'/%3E%3C/svg%3E") no-repeat center / contain !important; }
+.pin-badge.quiz-hidden { border-style: dashed; }
+.pin-badge.quiz-right { border-color: var(--matcha); }
+.pin-badge.quiz-right .badge-num { background: var(--matcha); color: #fff; }
+.pin-badge.quiz-wrong { border-color: #b84a39; }
+.pin-badge.quiz-wrong .badge-num { background: #b84a39; color: #fff; }
+
+/* quiz popup contents */
+.quiz-card .pin-card-detail { margin-bottom: .6rem; }
+.quiz-guess { width: 100%; box-sizing: border-box; padding: .55rem .7rem; margin: 0 0 .6rem;
+  border: 1.5px solid var(--card-border); border-radius: 10px; font: inherit; font-size: .9rem;
+  background: var(--bg-sand); color: var(--ink-deep); }
+.quiz-guess:focus { outline: none; border-color: var(--matcha); box-shadow: 0 0 0 3px var(--matcha-soft); }
+.quiz-your-guess { margin: 0 0 .15rem; font-size: .8rem; color: var(--ink-muted); font-style: italic; word-break: break-word; }
+.quiz-verdict { margin: 0 0 .5rem; font-size: .75rem; font-weight: 700; }
+.quiz-verdict.ok { color: var(--matcha); }
+.quiz-verdict.off { color: var(--amber); }
+.quiz-grade-row { display: flex; align-items: center; gap: .4rem; flex-wrap: wrap; }
+.quiz-btn { padding: .45rem .8rem !important; font-size: .82rem !important; border-radius: 10px !important; }
+.quiz-reveal { width: 100%; }
+.quiz-got { background: var(--matcha) !important; }
+.quiz-missed { background: #b84a39 !important; box-shadow: 0 3px 10px rgba(184, 74, 57, .25) !important; }
+.quiz-missed:hover:not(:disabled) { background: #9c2d1c !important; }
+.quiz-again { background: var(--bg-sand) !important; color: var(--ink-deep) !important;
+  border: 1.5px solid var(--card-border) !important; box-shadow: none !important; }
+.quiz-again:hover:not(:disabled) { background: var(--matcha-soft) !important; border-color: var(--matcha) !important; }
+.quiz-result { font-size: .78rem; font-weight: 700; }
+.quiz-result.right { color: var(--matcha); }
+.quiz-result.wrong { color: #b84a39; }
+.quiz-summary[hidden] { display: none; }
