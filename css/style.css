@@ -1155,3 +1155,10 @@ ul#facts li button { align-self: center; }
 
 .topnav .brand { display: inline-flex; align-items: center; gap: .5rem; }
 .topnav .brand-logo { height: 2rem; width: 2rem; object-fit: contain; }
+
+/* Make the "What is the method of loci?" paragraph as wide as the boxes below it */
+#loci .lead { max-width: none; }
+
+/* Intro paragraphs and callout run the full width of the page content */
+.home-section .lead,
+.home-section .callout { max-width: none; }
