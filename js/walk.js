@@ -70,6 +70,6 @@ function go(i) {
 }
 
 const tag = document.createElement("script");
-tag.src = `https://maps.googleapis.com/maps/api/js?key=${window.MAPS_API_KEY}&callback=initWalk`;
+tag.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=initWalk`;
 tag.async = true;
 document.head.appendChild(tag);
