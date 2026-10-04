@@ -1,37 +1,41 @@
-// Shared nav bar: the tabs are the steps of the product. Injected at the top of every page.
+// Shared nav bar: injected at the top of every page.
 (function () {
-  const steps = [
+  const links = [
+    { href: "index.html", label: "Home" },
     { href: "create.html", label: "Create" },
     { href: "place.html", label: "Place pins" },
-    { href: "walk.html", label: "Walk & memorize" },
-    { label: "Quiz", soon: true }
+    { href: "walk.html", label: "Walk" },
+    { href: "quiz.html", label: "Quiz" }
   ];
-  const strip = s => s.replace(/\.html$/, "");
-  const here = strip(location.pathname.split("/").pop() || "index");
-  const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text) e.textContent = text; return e; };
+  const here = location.pathname.split("/").pop() || "index.html";
 
-  const nav = mk("nav", "topnav");
+  const nav = document.createElement("nav");
+  nav.className = "topnav";
   nav.setAttribute("aria-label", "Main");
-  const brand = mk("a", "brand", "Locus Lane");
+
+  const brand = document.createElement("a");
+  brand.className = "brand";
   brand.href = "index.html";
+  brand.textContent = "Locus Lane";
   nav.appendChild(brand);
 
   const ul = document.createElement("ul");
-  steps.forEach((s, i) => {
-    const a = mk(s.soon ? "span" : "a", "step-link" + (s.soon ? " soon" : ""));
-    if (s.soon) { a.setAttribute("aria-disabled", "true"); a.title = "Coming soon"; }
-    else { a.href = s.href; if (strip(s.href) === here) a.setAttribute("aria-current", "page"); }
-    a.append(mk("span", "step-num", String(i + 1)), mk("span", "lbl", s.label));
-    if (s.soon) a.append(mk("small", "", "soon"));
+  links.forEach(l => {
     const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = l.href;
+    a.textContent = l.label;
+    if (l.href === here) a.setAttribute("aria-current", "page");
     li.appendChild(a);
     ul.appendChild(li);
   });
   nav.appendChild(ul);
 
-  const auth = mk("div", "auth");
+  const auth = document.createElement("div");
   auth.id = "auth";
+  auth.className = "auth";
   nav.appendChild(auth);
+
   document.body.prepend(nav);
 
   const authScript = document.createElement("script");
