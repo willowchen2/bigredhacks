@@ -156,6 +156,6 @@ document.addEventListener("keydown", e => {
 });
 
 const tag = document.createElement("script");
-tag.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=initPlace`;
+tag.src = `https://maps.googleapis.com/maps/api/js?key=${window.MAPS_API_KEY}&callback=initPlace`;
 tag.async = true;
 document.head.appendChild(tag);

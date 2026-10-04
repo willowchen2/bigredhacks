@@ -155,9 +155,9 @@
   window.routePicker = { getRoute: () => route };
 
   window.initRoutePicker = init;
-  if (!MAPS_API_KEY) { say("Add your Maps key to js/config.js to use the map."); return; }
+  if (!window.MAPS_API_KEY) { say("Add your Maps key to js/config.js to use the map."); return; }
   const tag = document.createElement("script");
-  tag.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&v=weekly&loading=async&callback=initRoutePicker`;
+  tag.src = `https://maps.googleapis.com/maps/api/js?key=${window.MAPS_API_KEY}&v=weekly&loading=async&callback=initRoutePicker`;
   tag.async = true;
   document.head.appendChild(tag);
 })();

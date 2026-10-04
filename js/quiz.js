@@ -171,7 +171,7 @@ restartBtn.onclick = () => {
 if (!pins.length) renderPanel();
 else {
   const tag = document.createElement("script");
-  tag.src = `https://maps.googleapis.com/maps/api/js?key=${MAPS_API_KEY}&callback=initQuiz`;
+  tag.src = `https://maps.googleapis.com/maps/api/js?key=${window.MAPS_API_KEY}&callback=initQuiz`;
   tag.async = true;
   document.head.appendChild(tag);
 }

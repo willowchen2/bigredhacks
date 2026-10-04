@@ -27,7 +27,7 @@ npm install
 **`js/config.js`** (gitignored, so each teammate creates their own):
 
 ```js
-MAPS_API_KEY = "your-maps-key";
+window.MAPS_API_KEY = "your-maps-key";
 ```
 
 **`.env`** in the project root (gitignored):
